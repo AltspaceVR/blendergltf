@@ -78,6 +78,7 @@ class ExportGLTF(bpy.types.Operator, ExportHelper, GLTFOrientationHelper):
     blocks_prune_unused = BoolProperty(name='Prune Unused Resources', default=True)
     meshes_apply_modifiers = BoolProperty(name='Apply Modifiers', default=True)
     meshes_interleave_vertex_data = BoolProperty(name='Interleave Vertex Data', default=True)
+    meshes_large_index_support = BoolProperty(name='32-bit Index Support', default=False)
     images_data_storage = EnumProperty(items=image_storage_items, name='Storage', default='COPY')
     images_allow_srgb = BoolProperty(name='sRGB Texture Support', default=False)
     asset_profile = EnumProperty(items=profile_items, name='Profile', default='WEB')
@@ -107,6 +108,7 @@ class ExportGLTF(bpy.types.Operator, ExportHelper, GLTFOrientationHelper):
         col.label('Meshes:', icon='MESH_DATA')
         col.prop(self, 'meshes_apply_modifiers')
         col.prop(self, 'meshes_interleave_vertex_data')
+        col.prop(self, 'meshes_large_index_support')
 
         col = layout.box().column()
         col.label('Shaders:', icon='MATERIAL_DATA')

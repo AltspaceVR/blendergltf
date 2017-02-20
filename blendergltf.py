@@ -568,7 +568,7 @@ def export_meshes(settings, meshes, skinned_meshes):
         va = buf.add_view(vertex_size * num_verts, Buffer.ARRAY_BUFFER)
 
         #Interleave
-        if settings['meshes_interleave_vertex_data'] == True:
+        if settings['meshes_interleave_vertex_data']:
             vdata = buf.add_accessor(va, 0, vertex_size, Buffer.FLOAT, num_verts, Buffer.VEC3)
             ndata = buf.add_accessor(va, 12, vertex_size, Buffer.FLOAT, num_verts, Buffer.VEC3)
             tdata = [buf.add_accessor(va, 24 + 8 * i, vertex_size, Buffer.FLOAT, num_verts, Buffer.VEC2) for i in range(num_uv_layers)]
@@ -658,9 +658,12 @@ def export_meshes(settings, meshes, skinned_meshes):
                 )
 
         if max_vert_index > 65535:
-            # Use the integer index extension
-            if OES_ELEMENT_INDEX_UINT not in g_glExtensionsUsed:
-                g_glExtensionsUsed.append(OES_ELEMENT_INDEX_UINT)
+            if settings['meshes_large_index_support']:
+                # Use the integer index extension
+                if OES_ELEMENT_INDEX_UINT not in g_glExtensionsUsed:
+                    g_glExtensionsUsed.append(OES_ELEMENT_INDEX_UINT)
+            else:
+                # split mesh into smaller primitives
 
         for mat, prim in prims.items():
             # For each primitive set add an index buffer and accessor.
